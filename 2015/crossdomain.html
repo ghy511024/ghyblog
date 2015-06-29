@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link type="text/css" href="../css/main.css" rel="stylesheet"/>
+        <title>iframe 跨域解决方案</title>
+    </head>
+    <body>
+        <div id="header" class="header"></div>
+        <div class="banner">
+        </div>
+        <div class="main">
+            <div class="area-main"></div>
+            <div class="content">
+                <div class="content-bg">
+                </div>
+                <h1 class="title">iframe 跨域终极解决方案</h1>
+                <div class="artic-wrap">
+                    <div class="time">2015-3-26</div>
+                    <div class="article">
+                        <p>域！一个前端工程师在披荆斩棘的路上肯定会遇到的一类怪物。有时候像个难为你的小混混，有时候像个市中心的钉子户...</p>
+                        <p>小混混可以稍稍给点好处，百度一下稍稍设置就能解决。钉子户嘛，大多数人都避开他，选择其他的途径来达到目的。</p>
+                        <p>下面聊聊不同的场景下的跨域情况和结局方案</p>
+                        <h2>iframe 跨域</h2>
+                        <h4>同域不同页</h4>
+                        <p>父页面 www.fengyunzhibo.com/a.htm </p>
+                        <p>子页面 www.fengyunzhibo.com/b.htm</p>
+                        <p class="s0">上面这种情况脑补百度</p>
+                        <h4>同子域</h4>
+                        <p>父页面 www.fengyunzhibo.com/a.htm </p>
+                        <p>子页面 user.fengyunzhibo.com/b.htm</p>
+                        <p class="s1">这种情况不算是严格跨域,可以通过domain欺骗来实现跨与通信。即a.htm和b.htm两个页面里面都要设置 document.domain="fengyunzhibo.com"</p>
+                        <h4>不同域</h4>
+                        <p>父页面 www.fengyunzhibo.com/a.htm </p>
+                        <p>子页面 www.zhangyu.tv/b.htm</p>
+                        <p class="s1">这个钉子户最麻烦，浏览器安全策略是严格禁止通信的</p>
+                        <p><strong>方案1：URL hash</strong></p>
+                        <p class="s1">子页面不能读取父页面的的URL但是却可以修改。修改URL会引起页面的刷新，在URL中有一部分确是修改了却不会引起刷新的东西，那就是hash(也可以叫frag)就是#号后边的字符串。所以我们可以通过修改hash来实现通讯。</p>
+                        <p >子页面发起通讯:</p>
+                        <pre>
+                        <code>
+                            &ltscript> 
+                            parent.location.hash="test=1"
+                            &lt/script>
+                        </code>
+                        </pre>
+                        <p>父亲页面接收通知</p>
+                        <p>接收通知就稍稍复杂点，可以通过注册监听事件来监听是否hash发生改变</p>
+                        <pre>
+                        <code>
+                            &ltscript> 
+                            window.onhashchange=function(){
+                            var hash=window.location.hash;//test==1
+                            }
+                            &lt/script>
+                        </code>
+                        </pre>
+                        <p>功能虽然实现了，但是细心的小伙伴发现每次通信浏览器的url动来动去的，尼马产品那边肯定会来喷。</p>
+                        <p>稍稍改进一下，在父亲页面的那个域下我们在新建一个页面叫做 mid.html 他用来做中间通信。他里面代码也很简单</p>
+                        <pre>
+                        <code>
+                            &ltscript> 
+                            //_tmp是父亲域下的全局变量
+                            window.onhashchange = function(){ parent.parent._tmp = location.hash; }
+                            &lt/script>
+                        </code>
+                        </pre>
+                        <p>因为mid.html他和父亲域是同一个域，所以能改变父亲域下的全局变量 _tmp 实现通知。</p>
+                        <p>而子页面想通知父页面的方式就得换一下</p>
+                        <pre>
+                        <code>
+                &ltscript> 
+                      &ltiframe id="mid" src="父亲域.com/mid.html" style="display:none"> &lt/iframe>
+                      document.getElementById('mid').src = '父亲域.com/mid.html'+"#test=1"; }
+                &lt/script>
+                        </code>
+                        </pre>
+                        <p>子页面改变了 嵌入iframe(mid.html)的hash值而触发mid.html的onhashchange 事件让mid.html 也父亲页面之间进行通讯。这样就不会引起父亲页面的url改变。</p>
+                        <p>还有一点小问题就是onhashchange的兼容问题，这个也好弄，把onhashchange的监听事件换成window.onresize的监听。子页面改变mid.htm的高度（反正这个页面是隐藏的，随便改），mid.html的onhashchange监听换成onresize的监听，这样就不会漏掉消息了，后面逻辑一样。思路是这样我就不贴代码了</p>
+                        <p><strong>方案2：postmessage</strong></p>
+                        <p class="s1">html5的postMessage()方法允许来自不同源的脚本采用异步方式进行有限的通信，可以实现跨文本档、多窗口、跨域消息传递。</p>
+                        <p class="s1">方法：postMessage(msg,source)。 msg : json 字符串，source : 协议+主机+端口号[+URL]</p>
+                        <p class="s1">举例：发送消息</p>
+                        <pre>
+                            <code>
+                &ltiframe id="mid" src="http://www.abc.com/test.html"> &lt/iframe>
+                
+                &ltscript> 
+                var iframe = document.getElementById('mid');
+                iframe.postMessage("{test:123}", 'http://www.abc.com');
+                &lt/script>
+                        </code>
+                        </pre>
+                        <p class="s1">在子页面中：接收消息需要在window中注册监听事件</p>
+                        <pre>
+                            <code>
+                &ltscript> 
+               window.addEventListener('message',function(e){
+                console.log("我收到了消息...")
+            },false);
+                &lt/script>
+                        </code>
+                        </pre>
+                        <p class="s1">子页面向父页面发送消息</p>
+                        <pre>
+                            <code>
+                &ltscript> 
+           window.parent.postMessage("{test:345}",'*');
+                &lt/script>
+                        </code>
+                        </pre>
+                        <p>父亲页面接收消息和子页面一样，需要注册监听事件。</p>
+                        <p>上面例子中主要介绍怎么用，其中各种其他的处理我都省去了，目前postMessage大部分的主流浏览器都兼容了，IE6,IE7除外。感觉稍稍有点不完美</p>
+                        <p>因为这个不兼容，很多人放弃了这种办法。直到有一天...</p>
+                        <p>在IE6/7下存在一个bug。navigator对象在父窗口和iframe之间是共享的。</p>
+                        <p>也就是说，父亲页面的监听函数，和iframe子页面的监听函数，都可以注册到navigator 上，这样付页面就可以通过调用注册在navigator上的子页面监听函数来实现付页面向子页面传递消息的通讯。反过来也行。 </p>
+                        <p>在父页面中注册监听函数，并且向子页面发送一条消息</p>
+                        <pre>
+                            <code>
+            &ltscript> 
+            window.navigator["parentlisten"] = function(msg,sour){
+                congosle.log("我是父页面 接收到的参数:"+msg)
+            };
+            // 向子页面发送消息（ie6/7  其他浏览器另行处理）
+            var postlisten = window.navigator["childlisten"];
+            if ( typeof listen == 'function' ) {
+                postlisten(msg, window);
+            } else {
+                throw new Error("这个函数并不存在");
+            }
+            &lt/script>
+                        </code>
+                        </pre>
+                        <p>在子页面中，注册监听和发送消息和父页面一样，这儿就不写了。。。</p>
+                        <p>将post message 和  window.navigator 结合起来，就可以完美的解决各种情况下的跨域。</p>
+                        <p>这种东西写起来不过还是有点麻烦，不过已经有现成的库帮我们封装好了这些。见项目主页 ：<a href="http://biqing.github.io/MessengerJS/" target="_blank">http://biqing.github.io/MessengerJS/</a></p>
+                        <p>跨域还有一些其他奇葩的办法，比如window.name什么的，但是不推荐，所以就介绍到这儿。</p>
+                        <p>从下一篇开始我会介绍一些，像MessengerJS这种能解决实际问题，并且有良好兼容性，能运用到企业开发中的插件。也算是工作的一个总结</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="footer" ></div>
+        <script type="text/javascript" src="../js/lib/jquery-1.8.3.min.js"></script>
+        <script type="text/javascript" src="../js/main.js"></script>
+    </body>
+</html>

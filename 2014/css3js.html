@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link type="text/css" href="../css/main.css" rel="stylesheet"/>
+        <title>css3js</title>
+        <style type="text/css">
+            .test-panel{
+                width:864px;
+                height:300px;
+                background:#ccc;
+                margin:0px auto;
+                position:relative;
+                background:#ccc;
+            }
+            .item{
+                width:20px;
+                height:20px;
+                position:absolute;
+                background:#fff;
+            }
+            .item1{top:20px;}
+            .item2{top:50px;}
+            .item3{top:80px;}
+            .item4{top:110px;}
+            .item5{top:140px;}
+            .item6{top:170px;}
+            .item7{top:200px;}
+            .item8{top:230px;}
+        </style>
+    </head>
+    <body>
+        <div id="header" class="header"></div>
+        <div class="banner">
+        </div>
+        <div class="main">
+            <div class="area-main"></div>
+            <div class="content">
+                <div class="content-bg">
+                </div>
+                <h1 class="title">js 控制css 动画</h1>
+                <div class="artic-wrap">
+                    <div class="time">2014-09-04</div>
+                    <div class="article"><p>css3动画，要比jquery动画流畅。如果动画能优先用css3动画，然后不支持的情况下用jquery，那样就太好了。</p>
+                        <p>jquery 动画，由js去控制dom样式，js 是单线程。当同执行多个动画时，就会出现卡和闪跳的情况。浏览器一秒是60帧，也就是说他60秒渲染一次，（你的视频是200帧的，那有140帧都丢了）。js在一秒给dom变换了100次值，但实际上只有60次生效了。造成了资源浪费，当动画量更多时，这种情况就更明显了。jquery 是13毫秒执行一次渲染，除去各种计算时间，大概也是一秒60帧左右。</p>
+                        <p>css3动画，是浏览器去根据元素样式的变化，将变化值划分为60帧，然后去渲染他。一般来讲肯定比jquery动画流畅自然点。</p>
+                        <h2>css3动画实际运用较少</h2>
+                        <p>简单来说，没时间。一般工作中的实际是一般设计师定稿后，就要在两三天内实现他，然后测试，在非常急的一个时间内要上线。根本没时间去优化这些。即使你在某一个地方用了css3的高级属性，但是和全局比起来就显得不协调。要保证兼容性，在有限的时间内，页面动画都会选择兼容性好一点的jquery动画。最后上线了，接下来的时间得忙下一个项目，优化这种事一般都被搁浅了。</p>
+                        <h2>改变现状</h2>
+                        <p>css3动画插件，大部分是将css3 属性的运用给你封装一下，在不支持css3的环境下，就失效了..失效了..失效了~~。兼容性是个问题，根本没解决我们的根本问题。</p>
+                        <p>好吧自己写，思路很简单，执行一个动画的时候，先去判断是否支持css动画属性，如果支持，就用css3样式去控制动画，如果不支持，就用jquery的动画</p>
+                        <h2>检测是否支持css3 transition 属性</h2>
+                        <p>用 modernizr.custom.js 当然也可以自己写，但是这个插件只有8k左右非常小。就是他了</p>
+                        <h2>检测浏览器</h2>
+                        <pre><code>
+   var div=document.createElement("ghy"),
+    m_style=div.style;
+    window.suport={
+        //检测浏览器css 样式前缀
+        getperfix:function(){
+            var property = {
+                transformProperty : '',
+                MozTransform : '-moz-',
+                WebkitTransform : '-webkit-',
+                OTransform : '-o-',
+                msTransform : '-ms-'
+            };
+            for (var p in property) {
+                if (typeof m_style[p] != 'undefined') {
+                    return property[p];
+                }
+            }
+            return null;
+        }
+    }
+
+                    </code></pre>
+                        <p>不同浏览器使用的css3前缀不一样，我们需要检测出当前浏览器前缀</p>
+                        <h2>
+                            自定义动画函数
+                        </h2>
+                        <pre><code>
+       $.fn.an=function(style,dur,ease){
+          var _this=this;
+          dur=dur||"400";
+          dur=dur+"ms"
+            if(Modernizr.csstransitions){
+              ease=ease||"ease"
+              var perfix=suport.getperfix();
+              var key=perfix+"transition";
+              var value="all "+dur+" "+ease;
+              $(_this).css(key,value);
+              $(_this).css("left",0);
+              setTimeout(function(){
+                  $(_this).css(style);
+              },25)
+          }
+          else{
+              ease!="linear"&&(ease="swing");
+              _this.animate(style,dur,ease);
+          }
+      };
+        // 当只有平移动画 left right top等 建议用这个函数，3d动画在流畅度上比transition 动画有较大提升
+        $.fn.an3d=function(left,top,dur,ease){
+            if($("html").hasClass("csstransforms3d")){
+                var _this=this;
+                dur=dur||"400";
+                ease=ease||"ease";
+                dur=dur+"ms";
+                var perfix=suport.getperfix();
+                left==null&&(left=0);
+                top==null&&(top=0);
+                $(_this).parent().css(+perfix+"transform-style","preserve-3d");
+                $(_this).css(perfix+"transition",perfix+"transform "+dur+" "+ease);
+                $(_this).css(perfix+"transform","translate3d("+left+"px, "+top+"px, 0)");
+            }
+            else{
+                var style={}
+                left!=null&&(style["left"]=left);
+                top!=null&&(style["top"]=top);
+                ease!="linear"&&(ease="swing");
+                _this.animate(style,dur,ease);
+            }
+        };
+        </code></pre>
+                        <h2>样例：</h2>
+                        <div class="test-panel">
+                            <div class="item item1"></div>
+                            <div class="item item2"></div>
+                            <div class="item item3"></div>
+                            <div class="item item4"></div>
+                            <div class="item item5"></div>
+                            <div class="item item6"></div>
+                            <div class="item item7"></div>
+                            <div class="item item8"></div>
+                        </div>
+                        <div><button class="test1">方案1</button>
+                            <button class="test2">方案2</button>
+                            <button class="test3">方案3</button>
+                            <button class="resite">复原</button>
+                        </div>
+                        <p>上面三种方案，如果在chrome 或者其他支持css3 属性的浏览器下 是三种实现方式。（ie 下都是jquery动画） </p>
+                        <p>如果你在chrome 下，那么你看到的第一种方案是transform3d 实现的，第二种是css3 的transition 自然过度动画，第三种就是兼容性最好的jquery动画。流畅程度请自己观察。如果你在chrome下看到三个动画的流畅度是一样的，~~那请默默关掉这个网页，当我啥都没说。</p>
+
+                        <h2>如何使用：</h2>
+                        <p>封装的动画函数，主要目的就是在高级浏览器下优先使用css3 或者transform3d动画，在不支持这些动画的环境下，就使用jquery动画。达到更好的动画体验。使用方法见下面 </p>
+
+                        <p> 函数实现依赖于modernizr.js（放心，并不大） 和jquery <a href="http://localhost:8809/blog/js/2014/css3js.js" target="_blank">查看插件代码</a> </p>
+                        <pre><code>
+        < script type="text/javascript" src="js/lib/jquery-1.8.3.min.js">< /script>
+        < script type="text/javascript" src="js/lib/modernizr.custom.87332.js?rd=1">< /script>
+        < script type="text/javascript" src="js/2014/css3js.js">< /script>
+        </code></pre>
+                        <p>如果动画只改变位置 left 和 top等位置属性,那使用下面方法 $(".xxx").an3d(left,top,time,("ease"|"linear"));</p>
+                        <pre><code>
+      $(".item1").an3d(800,null,600,"ease");
+        </code></pre>
+                        <p>如果动画改变的属性很多，比如宽高 用下面函数 $(".item1").an(style,time,"(linear|ease)");</p>
+                        <pre><code>
+       $(".item1").an({width:800},600,"ease");
+        </code></pre>
+                        <p>如果不支持css3动画上面两个方法将会执行jquery动画</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="footer" ></div>
+        <script type="text/javascript" src="../js/lib/jquery-1.8.3.min.js"></script>
+        <script type="text/javascript" src="../js/lib/modernizr.custom.87332.js?rd=1"></script>
+        <script type="text/javascript" src="../js/2014/css3js.js"></script>
+          <script type="text/javascript" src="../js/main.js"></script>
+        <script type="text/javascript" >
+            $(document).ready(function () {
+                var lock = false;
+                $(".test1").on("click", function () {
+                    if (lock) {
+                        return;
+                    }
+                    lock = true;
+                    $(".item1").an3d(800, null, 600, "ease");
+                    $(".item2").an3d(800, null, 800, "ease");
+                    $(".item3").an3d(800, null, 1200, "ease");
+                    $(".item4").an3d(800, null, 1600, "ease");
+                    $(".item5").an3d(800, null, 2000, "ease");
+                    $(".item6").an3d(800, null, 2400, "ease");
+                    $(".item7").an3d(800, null, 2800, "ease");
+                    $(".item8").an3d(800, null, 3200, "ease");
+                    //添加 执行完监听函数
+                    if (Modernizr.csstransitions) {
+                        suport.onAnimationEnd($(".item"), 2, function () {
+                        })
+                    }
+                })
+                $(".test2").on("click", function () {
+                    if (lock) {
+                        return;
+                    }
+                    lock = true;
+                    $(".item1").an({left: 800}, 600, "ease");
+                    $(".item2").an({
+                        left: 800
+                    }, 800, "ease");
+                    $(".item3").an({
+                        left: 800
+                    }, 1200, "ease");
+                    $(".item4").an({
+                        left: 800
+                    }, 1600, "ease");
+                    $(".item5").an({
+                        left: 800
+                    }, 2000, "ease");
+                    $(".item6").an({
+                        left: 800
+                    }, 2400, "ease");
+                    $(".item7").an({
+                        left: 800
+                    }, 2800, "ease");
+                    $(".item8").an({
+                        left: 800
+                    }, 3200, "ease");
+                })
+
+                $(".test3").on("click", function () {
+                    if (lock) {
+                        return;
+                    }
+                    lock = true;
+                    $(".item1").animate({
+                        left: 800
+                    }, 600);
+                    $(".item2").animate({
+                        left: 800
+                    }, 800);
+                    $(".item3").animate({
+                        left: 800
+                    }, 1200);
+                    $(".item4").animate({
+                        left: 800
+                    }, 1600);
+                    $(".item5").animate({
+                        left: 800
+                    }, 2000);
+                    $(".item6").animate({
+                        left: 800
+                    }, 2400);
+                    $(".item7").animate({
+                        left: 800
+                    }, 2800);
+                    $(".item8").animate({
+                        left: 800
+                    }, 3200);
+                })
+                $(".resite").on("click", function () {
+                    if (!lock) {
+                        return;
+                    }
+                    lock = false;
+                    $(".item").removeAttr("style")
+                })
+            }
+            )
+        </script>
+    </body>
+</html>

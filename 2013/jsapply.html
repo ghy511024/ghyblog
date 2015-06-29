@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>js apply 方法和call方法小结</title>
+        <link type="text/css" href="../css/main.css" rel="stylesheet"/>
+    </head>
+    <body>
+        <div id="header" class="header"></div>
+        <div class="banner">
+        </div>
+        <div class="main">
+            <div class="area-main"></div>
+            <div class="content">
+                <div class="content-bg">
+                </div>
+                <h1 class="title">js apply 方法和call 方法</h1>
+                <div class="artic-wrap">
+                    <div class="time">2013-12-19</div>
+                    <div class="article">
+                        <p>js apply 方法和call 方法 可以继承一个类的属性</p>
+                        <h4>apply</h4>
+                        <p>apply方法能劫持另外一个对象的方法，继承另外一个对象的属性</p>
+                        <p>Function.apply(obj,args)方法能接收两个参数</p>
+                        <p>&nbsp;&nbsp;&nbsp; obj：这个对象将代替Function类里this对象</p>
+                        <p>&nbsp;&nbsp;&nbsp; args：这个是数组，它将作为参数传给Function（args--&gt;arguments）</p>
+                        <h4>call</h4>
+                        <p>call方法和apply方法作用一样一样，只是接收的参数格式不一样</p>
+                        <p>Function.call(obj,arg1,arg2,arg3)方法能接收很多参数</p>
+                        <p>&nbsp;&nbsp;&nbsp; obj：这个对象将代替Function类里this对象</p>
+                        <p>&nbsp;&nbsp;&nbsp; arg1，arg2,...参数可以很多..</p>
+                        <h2>代码示例</h2>
+                        <pre>
+            <code>
+            function Animal(name){      
+                this.name = name;      
+                this.showName = function(){      
+                    alert(this.name);      
+                }      
+            }      
+
+            function Cat(name){    
+                Animal.apply(this, arguments);    
+                Animal.call(this, name);//这两种写法效果一样    
+            }      
+
+            var cat = new Cat("Black Cat");     
+            cat.showName(); 
+            </code>
+                        </pre>
+                        <p>Animal.call(this, name); 就是继承 Animal 方法（或者叫类）。然后Cat 类就有了Animal 方法的属性，但是this 对象只想指向的还是Cat</p>
+                        <p>执行Cat方法，Animal 方法也会执行，因为继承了。</p>
+                        <h2>运用场景</h2>
+                        <h4>获得最大数</h4>
+                        <p>Math.max(3,8,2)这样能返回最大数，但是Math.max([3,8,2]) 这种写法是错误的，Math.max方法不接受数组型参数，用apply可解决</p>
+                        <pre>
+            <code>
+            var arr=[5,7,9,1]
+            function getMax2(arr){
+                return Math.max.apply(null,arr)
+            }
+            </code>
+                        </pre>
+                        <h4>数组追加</h4>
+                        <p>push方法没有提供push一个数组,但是它提供了push(param1,param,…paramN) 所以同样也可以通过apply来装换一下这个数组</p>
+
+                        <pre>
+        <code>
+            var arr1=new Array("1","2","3");  
+            var arr2=new Array("4","5","6");  
+            Array.prototype.push.apply(arr1,arr2); //arr1==[1,2,3,4,5,6] 
+            //arr1.concat(arr2) 也是数组拼接
+        </code>
+                        </pre>
+                        <p>将数组2，追加到数组1中 arr1 数组的值就是 数组1和数组2 的和</p>
+                        <p>凡是能接收多个参数的方法 貌似都可以这样处理  方法.apply(想执行方法的变量,[参数])</p>
+
+                        <h2>高级运用，插件的中的运用</h2>
+                        <p>插件有很多种写法，但一般写在闭包里面或者某一个模块中，一个插件通常就是一个函数，要使一个函数根据不同的参数，执行不同的方法，可运用apply,和call</p>
+                        <pre>
+<code>
+         (function($){//闭包中 模块化，避免全局冲突
+            var myfun={//插件类 和插件的各种方法
+                init:function(){
+                    console.log("加载这个函数..")
+                },
+                showname:function(name){
+                    console.log("name: "+name)
+                },
+                showage:function(age){
+                    console.log("age: "+age)
+                }
+            }
+            $.fn.Myfun=function(e){//插件对外暴露接口
+                if(myfun[e]){
+                    return myfun[e].apply(this,Array.prototype.slice.call(arguments,1))
+// Array.prototype.slice.call(arguments,1) 将函数除去第一个参数的 其他参数，传入给插件，
+// 因为第一个参数插件的函数名 例如 a.Myfun("showname","test"); 第一个参数为 方法名，第二个为参数
+                }else{
+                    if(typeof e==="object"||!e){
+                        return myfun.init.apply(this,arguments)
+                    }else{
+                        $.error("没有 "+e+" 这个方法")
+                    }
+                }
+            }
+        })(jQuery)
+        var a=$("body");
+        a.Myfun();
+        a.Myfun("showname");
+        a.Myfun("showname","test");
+        a.Myfun("showage","23");
+</code>
+                        </pre>
+                        <p>运行结果： <img src="../images/js-apply.jpg" alt="" /></p>
+                        <h2>时隔两年</h2>
+                        <p>回过头来梳理一下这个东西，并不是书看的更多了，而是确实遇到了不少运用场景</p>
+                        <p>apply call配合着用主要在处理arguments时比较普遍。</p>
+                        <p>arguments 不是一个严格的数组，而是一个对象，也可以叫（伪数组，类数组）。js是一种弱类型的语言，很多方法并不做对象的类型检验，只关心你这个对象能做什么。</p>
+                        <p>Array 构造器和 String 构造器的propertype 上的方法被特意设计成访问者模式中的访问者。这些方法不对this的数据做任何类型的校验。所以arguments能假冒array调用push方法</p>
+                        <p>v8引擎里面Array.prototype.push的代码:</p>
+                        <pre><code class="language">
+           function ArrayPush() {
+                var n = TO_UINT32(this.length);
+                        var m = % _ArgumentsLength();
+                        for (var i = 0; i < m; i++) {
+                this[i + n] = % _Arguments(i); //属性拷贝  
+            }
+            this.length = n + m;//修正length  return this.length;}
+                      </code></pre>
+                        <p>apply 和call 都有重定向指针作用，自己用的最多场景做个备份，（仅为个人理解）</p>
+                        <p>主要用来做参数适配，和重定向作用域。配合着闭包的一些特性做参数</p>
+                        <pre><code class="language">
+        param.push.apply(this, arguments);//简单重定向作用域
+                      </code></pre>
+                        <p>当遇到某一个方法已经写好，参数也固定了，我们不能动他。我们想调用他之前封装一下，传一些我们的参数，并且对参数预处理一下。这时候就要借助到 apply 和call </p>
+                        <pre><code class="language">
+        function test(fun, b,c,d,e) {
+        if (fun) {
+            var arry = Array.prototype.slice.call(arguments, 1);//c是一个数组，去除第一个参数a
+            try {
+                return fun.apply(null, arry)//适配参数 之前的参数还可以做更多操作。
+            } catch (e) {
+                return e
+            }
+        }
+    }
+                      </code></pre>
+                        <p>上面两例都是介绍具体写法，实用场景尚未介绍，但是不是在这儿介绍。apply 和call 在配合闭包的使用，会很巧妙的解决一些问题，也是许多底层插件实现必不可少的部分。具体场景会在15年6月份的一篇博客中介绍到</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="footer" ></div>
+        <script  src="http://static.ws.kukuplay.com/common/scripts/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="http://cdn.bootcss.com/highlight.js/8.5/highlight.min.js"></script>
+        <script type="text/javascript" src="../js/main.js"></script>
+    </body>
+</html>

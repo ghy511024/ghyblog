@@ -1,0 +1,229 @@
+.inblock, .header .navigation .head-title, .header .navigation .head-nav {
+  display: -moz-inline-stack;
+  display: inline-block;
+  vertical-align: top;
+  zoom: 1;
+  *display: inline;
+}
+
+@font-face {
+  font-family: 'icomoon';
+  src: url("fonts/icomoon.eot");
+  src: url("fonts/icomoon.eot?#iefix") format("embedded-opentype"), url("../fonts/icomoon.ttf") format("truetype"), url("../fonts/icomoon.woff") format("woff"), url("../fonts/icomoon.svg#icomoon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+html, body {
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  color: #666;
+  background-color: #f5f5f5;
+  color: #666;
+  font-family: "Microsoft Yahei",sans-serif;
+  min-height: 100%;
+  height: auto;
+  position: relative;
+  box-sizing: border-box;
+  padding-bottom: 40px;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+p {
+  line-height: 24px;
+}
+
+.clear {
+  *zoom: 1;
+}
+.clear:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.header {
+  background-color: #454545;
+  font-family: "Noto Sans","Open Sans",Helvetica,sans-serif,"STHeiti","Microsoft Yahei";
+  width: 100%;
+  z-index: 100;
+}
+.header .navigation {
+  height: 40px;
+  margin: 0 auto;
+  width: 960px;
+}
+.header .navigation .head-title {
+  width: 140px;
+}
+.header .navigation .head-title a {
+  color: #cfcfcf;
+  display: block;
+  line-height: 40px;
+  text-align: center;
+}
+.header .navigation .head-nav {
+  width: 620px;
+}
+.header .navigation .head-nav .nav-list {
+  float: left;
+}
+.header .navigation .head-nav .nav-list li {
+  float: left;
+}
+.header .navigation .head-nav .nav-list li a {
+  border-left: 1px solid #5c5c5c;
+  color: #cfcfcf;
+  display: block;
+  font-size: 0.9em;
+  line-height: 40px;
+  padding: 0 1.75em;
+}
+.header .navigation .head-nav .nav-list li a.current {
+  background-color: #333;
+  border-left: 1px solid #333;
+}
+
+.banner {
+  background-color: #54c5d9;
+  background-image: url("../images/banner-2.png");
+  /*background-image: url("http://tympanus.net/Tutorials/SlidingHeaderLayout/img/header03.jpg");*/
+  background-size: cover;
+  height: 303px;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 40px;
+  width: 100%;
+  z-index: -2;
+  /*background-position: 0px -414px;*/
+}
+
+.main {
+  width: 960px;
+  z-index: 2;
+  margin: 0px auto;
+}
+.main .area-main {
+  height: 100px;
+  position: relative;
+}
+.main .content {
+  padding: 25px;
+  position: relative;
+}
+.main .content-bg {
+  position: absolute;
+  background: #fff;
+  height: 100%;
+  left: 0;
+  opacity: 0.85;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: -1;
+}
+.main h1.title {
+  font-size: 2em;
+  font-weight: 700;
+  margin-bottom: 0.5em;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 0.5em;
+}
+.main .artic-wrap ul li {
+  padding: 10px;
+  border-top: 1px solid #ededed;
+}
+.main .artic-wrap ul li:hover {
+  background: #DDD7DC;
+}
+.main .artic-wrap ul li:first-child {
+  border-top: none;
+}
+.main .artic-wrap ul li a {
+  color: #28a2b8;
+}
+.main .artic-wrap ul li .time {
+  float: right;
+}
+.main .artic-wrap .time {
+  font-size: 0.9em;
+}
+.main .artic-wrap .article {
+  padding: 10px;
+  width: 95%;
+}
+.main .artic-wrap .article p {
+  display: block;
+  line-height: 170%;
+  margin: 15px auto 0px  auto;
+  text-align: justify;
+  white-space: pre-wrap;
+}
+.main .artic-wrap .article p img {
+  vertical-align: top;
+}
+.main .artic-wrap .article p.s0 {
+  margin: 5px auto 0px  auto;
+}
+.main .artic-wrap .article p.s1 {
+  margin: 5px auto 0px  auto;
+  text-indent: 50px;
+}
+.main .artic-wrap .article p.s2 {
+  margin: 5px auto 0px  auto;
+  text-indent: 100px;
+}
+.main .artic-wrap .article h2, .main .artic-wrap .article h3 {
+  margin: 5px auto 10px;
+  padding: 10px 0;
+}
+.main .artic-wrap .article h2 {
+  border-bottom: 1px #ccc solid;
+  font-size: 175%;
+}
+.main .artic-wrap .article pre code {
+  overflow-x: scroll;
+  font-family: Consolas, Courier, monospace !important;
+  background: #002b36;
+  color: #839496;
+  display: block;
+  border: none;
+  font-size: 16px;
+  margin: 0;
+  padding: 5px;
+}
+.main .artic-wrap .blue {
+  color: #7a7af6;
+}
+
+#footer {
+  background-color: #383838;
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+}
+#footer .foot-content {
+  height: 40px;
+  width: 960px;
+  margin: 0px auto;
+}
+#footer .foot-content span {
+  color: #a1a1a1;
+  font-size: 14px;
+  line-height: 40px;
+}

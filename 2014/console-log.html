@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>神奇的log 插件</title>
+        <link type="text/css" href="../css/main.css" rel="stylesheet"/>
+        <style type="text/css">
+            @font-face {
+                font-family: 'Vtks Beautiful Dreams';
+                src: url('fonts/Vtks_Beautiful_Dreams.ttf');
+            }
+            @font-face {
+                font-family: 'DotLine';
+                src: url('fonts/Dotline.ttf');
+            }
+            face{
+                font-family: "Vtks Beautiful Dreams";
+                font-size:36px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="header" class="header"></div>
+        <div class="banner">
+        </div>
+        <div class="main">
+            <div class="area-main"></div>
+            <div class="content">
+                <div class="content-bg">
+                </div>
+                <h1 class="title">神奇的log插件</h1>
+                <div class="artic-wrap">
+                    <div class="time">2014-1-5</div>
+                    <div class="article">
+                        <p>请按F12打开控制台查看效果</p>
+                        <h2>引用</h2>
+                        <p> 首先调用插件 </p>
+                        <pre>
+            <code>
+                 < script type="text/javascript" src="js/jquery-1.8.3.min.js">&nbsp/script>
+                 < script type="text/javascript" src="js/xxx/imgLog.js">&nbsp/script>
+            </code>
+                        </pre>
+                        <h2>使用</h2>
+                        <p>插件提供三种语法</p>
+                        <pre>
+            <code>
+                var style={
+                    color:"#130BD6",
+                    "font-size":"84px",
+                    "font-family":"Vtks Beautiful Dreams"
+                }
+                
+                Log(["我是小宇","welcome to my blog"],[{ "color":"#FF7979" },style]);
+                Log("我最喜欢的运动是乒乓球，你呢？",{"color":"#90979B", "font-size":"24px"  });
+                Log("img","xxx.jpg",300,200);
+                        </code>
+                        </pre>
+                        <p>运行结果：  <img src="../images/2014/console-log.jpg" alt="" />  </p>
+                        <h2>说明</h2>
+                        <p>此插件只在chrome 浏览器有效，兼容性尚待完善</p>
+                        <!--<p><a href="../js/2014/imgLog.js" target="_blank">查看插件源代码</a></p>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="footer" ></div>
+        <script  src="http://static.ws.kukuplay.com/common/scripts/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="http://cdn.bootcss.com/highlight.js/8.5/highlight.min.js"></script>
+        <script type="text/javascript" src="../js/main.js"></script>
+    </body>
+</html>

@@ -1,0 +1,68 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>js apply 方法和call方法小结</title>
+        <link type="text/css" href="../css/main.css" rel="stylesheet"/>
+    </head>
+    <body>
+        <div id="header" class="header"></div>
+        <div class="banner">
+        </div>
+        <div class="main">
+            <div class="area-main"></div>
+            <div class="content">
+                <div class="content-bg">
+                </div>
+                <h1 class="title">js 正则表达式 运用</h1>
+                <div class="artic-wrap">
+                    <div class="time">2013-12-21</div>
+                    <div class="article">
+                        <h2>定义正则表达式</h2>
+                        <p>定义正则表达式有两种形式，一种是普通形式，一种是函数构造</p>
+                        <p class="s0">var reg=/a*b/$p;  (例：var reg=/a*b/g)</p>
+                        <p class="s0">var reg=new RegExp("a*b","$p");  (例：var reg=new RegExp("a*b","g");)</p>
+                        <p class="s0">$p 是可填参数 主要有三个参数</p>
+                        <p class="s1">g：代表可以进行全局匹配。</p>
+                        <p class="s1">i：代表不区分大小写匹配。</p>
+                        <p class="s1">m：代表可以进行多行匹配。</p>
+                        <!--==============表达式操作==============-->
+                        <h2>表达式操作</h2>
+                        <h4 class="blue">exec(str)</h4>
+                        <p>exec(str),返回str中与表达式相匹配的第一个字符串</p>
+                        <p class="s0">第一次执行exec返回一个第一个匹配，此时继续执行exec，则依次返回第二个.多次执行，g参数是必须的</p>
+                        <pre>
+        <code>
+        var regx=/#.A/g;
+        var rs1=regx.exec("s#vAsf#bAsf");//rs1=["#vA"];
+        var rs2=regx.exec("s#vAsf#bAsf");//rs2=["#bA"];
+        </code>
+                        </pre>
+
+                        <h4 class="blue">test(str)</h4>
+                        <p>判断字符串str是否匹配表达式，返回一个布尔值</p>
+                        <pre>
+
+        <code>
+        var regx=/user\d+/g;
+        var flag=regx.test("user12dd");//flag==true
+        </code>
+                        </pre>
+
+                        <h4 class="blue">match(expr)</h4>
+                        <p>返回与expr相匹配的一个字符串数组，如果没有加参数g，则返回第一个匹配，加入参数g则返回所有的匹配</p>
+                        <pre>
+        <code>                 
+        var regx=/user\d+/g;
+        var arry="user12dduser44".match(regx);//[user12,user44]
+        </code>
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="footer" ></div>
+        <script  src="http://static.ws.kukuplay.com/common/scripts/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="http://cdn.bootcss.com/highlight.js/8.5/highlight.min.js"></script>
+        <script type="text/javascript" src="../js/main.js"></script>
+    </body>
+</html>

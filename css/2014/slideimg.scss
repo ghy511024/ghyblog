@@ -1,0 +1,128 @@
+
+.demo{
+    width:100%;
+    height:300px;
+}
+#slide1{
+    width:750px;
+    /*margin-left:-400px;*/
+    height:300px;
+    position:relative;
+    background: #ccc;
+    border: 1px solid blue;
+    ul{
+        width:1000px;
+        position:relative;
+        /*margin-left:-250px;*/
+        height:300px;
+        overflow: hidden;
+        border: 1px solid red;
+        li{
+            border:1px solid #fff;
+            display:none;
+            position:relative;
+            padding:0px;
+            width:248px;
+            height:300px;
+            float: left;
+            background: rgba(172, 225, 235, 0.75); 
+            font-size:200px;
+            text-align: center;
+            color:rgba(255, 255, 255, 0.91);
+            line-height:300px;
+        }
+    }
+}
+.slide-panel{
+    width:800px;
+    height:300px;
+    background: #ccc;
+    margin:0px auto;
+    position: relative;
+    overflow:hidden;
+    .item{
+        position:absolute;
+        width:200px;
+        height:100%;
+        background: rgba(172, 225, 235, 0.75);
+        display: none;
+        font-size:100px;
+        text-align: center;
+        color:rgba(255, 255, 255, 0.91);
+        line-height:300px;
+    }
+}
+
+// AviaSlider
+
+.demo3{
+    #droping-curtain{ 
+        height:320px; 	/*this changes the height of the image slider*/
+        width:620px;
+        
+        overflow: hidden;
+        position: relative;
+        margin:0px auto;
+        img,a,a img{
+            border:none;
+            text-decoration: none;
+        }
+        li{
+            padding:0px;
+            margin:0px;
+            over-flow:hidden;
+        }
+        li, .featured{
+            display: block;
+            width:100%;
+            height:100%;
+            position: absolute;
+            top:0;
+            left:0;
+            z-index: 1;
+        }
+    }
+    .js_active {
+        .aviaslider {
+            li, .featured{
+                display:none;
+            }
+        }
+    }
+    .slidecontrolls{
+        margin:20px auto 0 auto;
+        position: relative;
+        float:left;
+        a{
+            height:20px;
+            width:18px;
+            display:block;
+            cursor: pointer;
+            background: transparent url(../../images/slidimg/controlls.gif) center bottom no-repeat;
+            float:left;
+            outline: none;
+            &:hover,&.active_item{
+                background: transparent url(../../images/slidimg/controlls.gif) center top no-repeat;
+            }
+        }
+    }
+    .feature_excerpt{
+        width:610px;
+        position: absolute;
+        display: block;
+        bottom: 0;
+        left:0;
+        z-index: 2;
+        padding:14px 15px;
+        font-size: 11.5px;
+        line-height:1.5em;
+        cursor: pointer;
+        background: #000;
+        color: #fff;
+        strong{
+            display: block;
+            font-size: 15px;
+            padding-bottom: 3px;
+        }
+    }
+}

@@ -1,0 +1,41 @@
+.item {
+  width: 150px;
+  height: 200px;
+  background: #ccc;
+  cursor: pointer;
+  overflow: hidden;
+}
+.item svg line {
+  stroke-width: 3px;
+  stroke: #000;
+  -webkit-transition: all .5s;
+  transition: all .5s;
+}
+.item svg line.top, .item svg line.bottom {
+  stroke-dasharray: 165 120;
+}
+.item svg line.left, .item svg line.right {
+  stroke-dasharray: 215 170;
+}
+.item:hover {
+  background: #bbb;
+}
+.item:hover svg line {
+  stroke-width: 7px;
+}
+.item:hover svg line.top {
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+.item:hover svg line.left {
+  -webkit-transform: translateY(200px);
+  transform: translateX(200px);
+}
+.item:hover svg line.right {
+  -webkit-transform: translateY(-50%);
+  transform: translateX(-50%);
+}
+.item:hover svg line.bottom {
+  -webkit-transform: translateX(50%);
+  transform: translateX(-50%);
+}

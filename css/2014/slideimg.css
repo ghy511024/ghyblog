@@ -1,0 +1,121 @@
+.demo {
+  width: 100%;
+  height: 300px;
+}
+
+#slide1 {
+  width: 750px;
+  /*margin-left:-400px;*/
+  height: 300px;
+  position: relative;
+  background: #ccc;
+  border: 1px solid blue;
+}
+#slide1 ul {
+  width: 1000px;
+  position: relative;
+  /*margin-left:-250px;*/
+  height: 300px;
+  overflow: hidden;
+  border: 1px solid red;
+}
+#slide1 ul li {
+  border: 1px solid #fff;
+  display: none;
+  position: relative;
+  padding: 0px;
+  width: 248px;
+  height: 300px;
+  float: left;
+  background: rgba(172, 225, 235, 0.75);
+  font-size: 200px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.91);
+  line-height: 300px;
+}
+
+.slide-panel {
+  width: 800px;
+  height: 300px;
+  background: #ccc;
+  margin: 0px auto;
+  position: relative;
+  overflow: hidden;
+}
+.slide-panel .item {
+  position: absolute;
+  width: 200px;
+  height: 100%;
+  background: rgba(172, 225, 235, 0.75);
+  display: none;
+  font-size: 100px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.91);
+  line-height: 300px;
+}
+
+.demo3 #droping-curtain {
+  height: 320px;
+  /*this changes the height of the image slider*/
+  width: 620px;
+  overflow: hidden;
+  position: relative;
+  margin: 0px auto;
+}
+.demo3 #droping-curtain img, .demo3 #droping-curtain a, .demo3 #droping-curtain a img {
+  border: none;
+  text-decoration: none;
+}
+.demo3 #droping-curtain li {
+  padding: 0px;
+  margin: 0px;
+  over-flow: hidden;
+}
+.demo3 #droping-curtain li, .demo3 #droping-curtain .featured {
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+.demo3 .js_active .aviaslider li, .demo3 .js_active .aviaslider .featured {
+  display: none;
+}
+.demo3 .slidecontrolls {
+  margin: 20px auto 0 auto;
+  position: relative;
+  float: left;
+}
+.demo3 .slidecontrolls a {
+  height: 20px;
+  width: 18px;
+  display: block;
+  cursor: pointer;
+  background: transparent url(../../images/slidimg/controlls.gif) center bottom no-repeat;
+  float: left;
+  outline: none;
+}
+.demo3 .slidecontrolls a:hover, .demo3 .slidecontrolls a.active_item {
+  background: transparent url(../../images/slidimg/controlls.gif) center top no-repeat;
+}
+.demo3 .feature_excerpt {
+  width: 610px;
+  position: absolute;
+  display: block;
+  bottom: 0;
+  left: 0;
+  z-index: 2;
+  padding: 14px 15px;
+  font-size: 11.5px;
+  line-height: 1.5em;
+  cursor: pointer;
+  background: #000;
+  color: #fff;
+}
+.demo3 .feature_excerpt strong {
+  display: block;
+  font-size: 15px;
+  padding-bottom: 3px;
+}

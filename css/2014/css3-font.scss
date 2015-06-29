@@ -1,0 +1,250 @@
+body{
+    /*background-color: #1a948d;*/
+    padding:0px;
+    background-repeat: no-repeat;
+    background-position: top center;
+    width: 100%;
+    background-size: cover;
+    height: 100%;
+    min-height: 1000px;
+    overflow: hidden;
+    font-family: 'quicksandlight', Helvetica, Arial;
+    color: #FFFFFF;
+    text-shadow: -1px -1px 4px rgba(0, 0, 0, .35);
+    filter: dropshadow(color=#000000, offx=1, offy=1);
+}
+
+/*.main{
+    
+    width:980px;
+    margin:0px auto;
+    height:auto;
+}*/
+p{
+    text-align:center;
+}
+#demo1{
+    p{
+        font-size:64px;
+        font-weight:bold;
+        color: #fff;
+        text-shadow://一共7层，前三层，都是接近背景的颜色，最后几层是文字的阴影颜色，向下偏移一点，模糊值较大
+        #fff 0 0 10px, 
+        #fff 0 4px 3px,
+        #ddd 0 9px 3px,
+        #ccc 0 12px 1px, 
+        rgba(0,0,0,0.2) 0 14px 5px, 
+        rgba(0,0,0,0.1) 0 20px 10px,
+        rgba(0,0,100,0.2) 0 15px 80px;
+    }
+}
+#demo2{
+    p{
+        padding: 40px;
+        font-size: 75px;
+        font-family: 'helvetica', san-serif;
+        font-weight: bold;
+        text-align: center;
+        text-transform: uppercase;
+        text-shadow: 0 0 80px black,0 0 30px white,0 0 20px white;
+        color: white;
+    }
+}
+
+@-webkit-keyframes shimmer{
+    0%{
+        background-position: top left
+    }
+    100%{
+        background-position: top right
+    }
+}
+#demo3{
+    background:#000;
+    p{
+        font-size:100px;
+        font-weight: 300;
+        text-align: center;
+        color: rgba(255,255,255,0.1);
+        background: -webkit-gradient(linear, left top, right top, from(#222), to(#222), color-stop(0.5, #fff));
+        background: -moz-gradient(linear, left top, right top, from(#222), to(#222), color-stop(0.5, #fff));
+        background: gradient(linear, left top, right top, from(#222), to(#222), color-stop(0.5, #fff));
+        -webkit-background-size: 125px 100%;
+        -moz-background-size: 125px 100%;
+        background-size: 125px 100%;
+        -webkit-background-clip: text;
+        -moz-background-clip: text;
+        background-clip: text;
+        -webkit-animation-name: shimmer;
+        -moz-animation-name: shimmer;
+        animation-name: shimmer;
+        -webkit-animation-duration: 4s;
+        -moz-animation-duration: 2s;
+        animation-duration: 2s;
+        -webkit-animation-iteration-count: infinite;
+        -moz-animation-iteration-count: infinite;
+        animation-iteration-count: infinite;
+        background-repeat: no-repeat;
+        background-position: 0 0;
+        background-color: #222;
+        
+        background-position: top left
+    }
+}
+
+
+.item{
+    width:150px;
+    height:200px;
+    background:#ccc;
+    cursor:pointer;
+    overflow: hidden;
+    svg{
+        line{
+            stroke-width:3px;
+            stroke:#000;
+            -webkit-transition: all .5s;
+            transition: all .5s;
+            &.top,&.bottom{
+                stroke-dasharray: 165 120; //父容器边框线宽 150 则 实线 为150+想多出来的x(15) 虚线为150-2x(30)
+            }
+            &.left,&.right{
+                stroke-dasharray: 215 170; //父容器边框线宽 200 则 实线 为200+想多出来的x(15) 虚线为200-2x(30)
+            }
+        }
+    }
+    &:hover{
+        background:#bbb;
+        svg{ 
+            line{
+                stroke-width:7px;
+                &.top{
+                    -webkit-transform: translateX(-50%);
+                    transform: translateX(-50%); 
+                }
+                &.left{
+                    -webkit-transform: translateY(200px);//父容器宽度
+                    transform: translateX(200px); 
+                }
+                &.right{
+                    -webkit-transform: translateY(-50%);
+                    transform: translateX(-50%); 
+                }
+                &.bottom{
+                    -webkit-transform: translateX(50%);
+                    transform: translateX(-50%); 
+                }
+            }
+        }
+    }
+}
+
+.font-panel{
+    background: #000;
+}
+.an-text {
+    text-align:center;
+    position: relative;
+    background-image: -webkit-linear-gradient(top, #707070, #000);
+    /*background-image: -webkit-linear-gradient(-40deg, transparent 0%, transparent 40%, #fff 50%, transparent 60%, transparent 100%);*/
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 1px #f5f5f5;
+    font-size: 120px;
+    margin: 0;
+    line-height: 1;
+}
+.an-text:before {
+    position:absolute;
+    content: 'ABCD';
+    text-align:center;
+    z-index: 10;
+    background-image: -webkit-linear-gradient(-40deg, transparent 0%, transparent 40%, #fff 50%, transparent 60%, transparent 100%);
+    /*background-position:-680px 0;*/
+    -webkit-background-clip: text;
+    -webkit-text-stroke: 0;
+    padding-right: 260px;//文字长度260+ 白光旋转后的x多出来的长度
+    -webkit-animation-duration: 4s;
+    -webkit-animation-delay: 2s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-name: chrome_effect;
+    background-position:-360px 0;
+}
+
+@-webkit-keyframes chrome_effect {
+    0% {background-position:-300px 0;}
+    40% {background-position:120px 0;}
+    100% {background-position:120px 0;}
+}
+
+//=============
+/* hardware accelatator class */	
+.trans3d
+{
+    -webkit-transform-style: preserve-3d;
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform-style: preserve-3d;
+    -moz-transform: translate3d(0, 0, 0);
+    -ms-transform-style:preserve-3d;
+    -ms-transform: translate3d(0, 0, 0);
+    transform-style:preserve-3d;
+    transform: translate3d(0, 0, 0);
+    
+    /*-webkit-backface-visibility: hidden;
+        -moz-backface-visibility: hidden;
+        -ms-backface-visibility:hidden;
+    backface-visibility:hidden;*/
+}
+
+#contentContainer
+{
+    position:absolute;
+    margin-left:-500px;
+    margin-top:-500px;
+    left:50%;
+    top:50%;
+    width:1000px;
+    height:1000px;
+}
+
+#carouselContainer
+{
+    position:absolute;
+    margin-left:-500px;
+    margin-top:-500px;
+    left:50%;
+    top:50%;
+    width:1000px;
+    height:1000px;
+}
+
+.carouselItem
+{
+    width:320px;
+    height:130px;
+    position:absolute;
+    left:50%;
+    top:50%;
+    margin-left:-160px;
+    margin-top:-90px;
+    visibility:hidden;
+}
+
+.carouselItemInner
+{
+    width:320px;
+    height:130px;
+    position:absolute;
+    background-color:rgba(255, 255, 255, .75);
+    border:10px solid rgba(255, 255, 255, .5);
+    color:aqua;
+    font-size:72px;
+    left:50%;
+    top:50%;
+    margin-left:-160px;
+    margin-top:-90px;
+    text-align:center;
+    padding-top:50px;
+    
+}

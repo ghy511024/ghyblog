@@ -1,0 +1,152 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>js apply 方法和call方法小结</title>
+        <link type="text/css" href="../css/main.css" rel="stylesheet"/>
+    </head>
+    <body>
+        <div id="header" class="header"></div>
+        <div class="banner">
+        </div>
+        <div class="main">
+            <div class="area-main"></div>
+            <div class="content">
+                <div class="content-bg">
+                </div>
+                <h1 class="title">scss 中常用css3 属性</h1>
+                <div class="artic-wrap">
+                    <div class="time">2013-12-20</div>
+                    <div class="article">
+                        <p>工作中常用到css3 动画，和css3的相关属性。结合scss 可以对常用css3属性做一个封装。</p>
+                        <!--=============盒阴影===========-->
+                        <h2>盒阴影</h2>
+                        <h4>语法：</h4>
+                        <p> -webkit-box-shadow: $x $y $size $blur $color;</p>
+                        <p> -moz-box-shadow: $x $y $size $blur $color;</p>
+                        <p> box-shadow: $x $y $size $blur $color;</p>
+                        <p>$x: x偏移量(px)  $y:y轴偏移量(px)  $size:阴影宽度(px)  $blur：模糊尺寸（px） $color:阴影颜色（色值） </p>
+
+                        <!--=============过度动画===========-->
+                        <h2>平滑过度</h2>
+                        <h4>语法</h4>
+                        <p class="s0">-webkit-transition: $property  $duration  $easy $delay;</p>
+                        <p class="s0">   -moz-transform: $property  $duration  $easy $delay;</p>
+                        <p class="s0">       -o-transform: $property  $duration  $easy $delay;</p>
+                        <p class="s0">     -ms-transform: $property  $duration  $easy $delay;</p>
+                        <p class="s0">            transform: $property  $duration  $easy $delay;</p>
+                        <p>$property 单独设置语法：transition-property : background; (css属性名)</p>
+                        <p>$duration 单独设置语法：transition-duration : 2s(2000ms); (完成过渡需要的秒(毫秒) ，默认0) </p>
+                        <p class="s1">$easy 单独设置语法：transition-timing-function: ease-in-out;</p>
+                        <p class="s1">$easy 有6个值可选 </p>
+                        <p class="s2"> $easy=linear 规定以相同的速度开始至结束的过渡效果 . 等于 cubic-bezier(0,0,11)</p>
+                        <p class="s2"> $easy=ease 慢速开始，然后变快，然后慢速结束的过渡效果 cubic-bezier(0.25, 0.1, 0.25, 1)</p>
+                        <p class="s2"> $easy=ease-out 慢速度结束的过渡效果 cubic-bezier(0,0,0.58,1)</p>
+                        <p class="s2"> $easy=ease-in-out 以慢速度开始和结束 cubic-bezier(0.42.0.0.58,1)</p>
+                        <p class="s2"> $easy=cubic-bezier(n,n,n,n) 在cubic-bezier函数中定义值， （0， 1）之间的值</p>
+                        <p>$delay 单独设置语法：transition-delay : 2s(2000ms); (过渡效果到开始时的延时时间) </p>
+                        <!--=================border===========-->
+                        <!--                        <h2>神奇的border</h2>
+                                                <h4>语法</h4>-->
+                        <a href="#" class="hi-icon icon1"></a>
+                        <a href="#" class="hi-icon icon2"></a>
+                        <pre>
+        <code>
+        //清除浮动
+        .clear {
+            *zoom: 1;
+            &:after{
+                content: "";
+                display: table;
+                clear: both;
+            }
+        }
+        //内联
+        .inblock{
+            display: -moz-inline-stack;
+            display: inline-block;
+            vertical-align: top;
+            zoom: 1; 
+            *display: inline;
+        }
+        //圆角
+        @mixin b-radius ($radius) {
+            -webkit-border-radius: $radius;
+            -moz-border-radius: $radius;
+            border-radius: $radius;
+            //IE
+            behavior: url(ie-css3.htc);
+            zoom:1;
+        }
+
+        //阴影
+        @mixin b-shadow($x: 0px, $y: 3px, $blur: 5px, $alpha: 0.5){
+            -webkit-box-shadow: $x $y $blur rgba(0, 0, 0, $alpha);
+            -moz-box-shadow: $x $y $blur rgba(0, 0, 0, $alpha);
+            box-shadow: $x $y $blur rgba(0, 0, 0, $alpha);
+        }
+        //阴影
+        @mixin b-shadow2($x: 0px, $y: 3px, $blur: 5px, $color: #fff){
+            -webkit-box-shadow: $x $y $blur  $color;
+            -moz-box-shadow: $x $y $blur $color;
+            box-shadow: $x $y $blur  $color;
+        }
+        /* 过度 */
+        @mixin transition ($all: all, $time: 1s, $ease: ease-out) {
+            -webkit-transition: $all $time $ease;
+            -moz-transition: $all $time $ease;
+            -o-transition: $all $time $ease;
+            -ms-transition: $all $time $ease;
+            transition: $all $time $ease;
+        }
+        //过度+延迟
+        @mixin transition-delay($time:0.3s,$delay:0s, $easy:ease-out){
+            -webkit-transition: all  $time $delay $easy;
+            -moz-transition: all  $time $delay $easy;
+            -o-transition: all  $time $delay $easy;
+            transition: all  $time $delay $easy;
+        }
+        /* 旋转 */
+        @mixin transform ($rotate: 90deg, $scale: 1, $skew: 1deg, $translate: 10px) {
+            -webkit-transform: rotate($rotate) scale($scale) skew($skew) translate($translate);
+            -moz-transform: rotate($rotate) scale($scale) skew($skew) translate($translate);
+            -o-transform: rotate($rotate) scale($scale) skew($skew) translate($translate);
+            -ms-transform: rotate($rotate) scale($scale) skew($skew) translate($translate);
+            transform: rotate($rotate) scale($scale) skew($skew) translate($translate);
+        }
+        //背景颜色线性渐变
+        @mixin gradient ($origin: left, $start: #ffffff, $stop: #000000) {
+            background-color: $start;
+            background-image: -webkit-linear-gradient($origin, $start, $stop);
+            background-image: -moz-linear-gradient($origin, $start, $stop);
+            background-image: -o-linear-gradient($origin, $start, $stop);
+            background-image: -ms-linear-gradient($origin, $start, $stop);
+            background-image: linear-gradient($origin, $start, $stop);
+        }
+        //快速渐变 从现有的颜色渐变到 指定 的透明度 开始颜色就是 本身的颜色
+        @mixin quick-gradient ($origin: left, $alpha: 0.2) {
+            background-image: -webkit-linear-gradient($origin, rgba(0,0,0,0.0), rgba(0,0,0,$alpha));
+            background-image: -moz-linear-gradient($origin, rgba(0,0,0,0.0), rgba(0,0,0,$alpha));
+            background-image: -o-linear-gradient($origin, rgba(0,0,0,0.0), rgba(0,0,0,$alpha));
+            background-image: -ms-linear-gradient($origin, rgba(0,0,0,0.0), rgba(0,0,0,$alpha));
+            background-image: linear-gradient($origin, rgba(0,0,0,0.0), rgba(0,0,0,$alpha));
+        }
+        //镜像效果
+        @mixin reflect ($length: 50%, $opacity: 0.2){
+            -webkit-box-reflect: below 0px -webkit-gradient(linear, left top,
+            left bottom, from(transparent),
+            color-stop($length, transparent), to(rgba(255,255,255,$opacity)));
+        }
+        </code>
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="footer" ></div>
+    <script  src="http://static.ws.kukuplay.com/common/scripts/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="http://cdn.bootcss.com/highlight.js/8.5/highlight.min.js"></script>
+    <script type="text/javascript" src="../js/main.js"></script>
+</body>
+</html>

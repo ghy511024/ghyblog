@@ -1,0 +1,46 @@
+.item{
+    width:150px;
+    height:200px;
+    background:#ccc;
+    cursor:pointer;
+    overflow: hidden;
+    svg{
+        line{
+            stroke-width:3px;
+            stroke:#000;
+            -webkit-transition: all .5s;
+            transition: all .5s;
+            &.top,&.bottom{
+                stroke-dasharray: 165 120; //父容器边框线宽 150 则 实线 为150+想多出来的x(15) 虚线为150-2x(30)
+            }
+            &.left,&.right{
+                stroke-dasharray: 215 170; //父容器边框线宽 200 则 实线 为200+想多出来的x(15) 虚线为200-2x(30)
+            }
+        }
+    }
+    &:hover{
+        background:#bbb;
+        svg{ 
+            line{
+                stroke-width:7px;
+                &.top{
+                    -webkit-transform: translateX(-50%);
+                    transform: translateX(-50%); 
+                }
+                &.left{
+                    -webkit-transform: translateY(200px);//父容器宽度
+                    transform: translateX(200px); 
+                }
+                &.right{
+                    -webkit-transform: translateY(-50%);
+                    transform: translateX(-50%); 
+                }
+                &.bottom{
+                    -webkit-transform: translateX(50%);
+                    transform: translateX(-50%); 
+                }
+            }
+        }
+    }
+}
+
