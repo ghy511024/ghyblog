@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link type="text/css" href="../css/main.css" rel="stylesheet"/>
+        <link type="text/css" href="../css/highlight/agate.css" rel="stylesheet"/>
+        <script type="text/javascript" src="http://cdn.bootcss.com/highlight.js/8.5/highlight.min.js"></script>
+        <title>event自定义事件底层核心库</title>
+    </head>
+    <body>
+        <div id="header" class="header"></div>
+        <div class="banner">
+        </div>
+        <div class="main">
+            <div class="area-main"></div>
+            <div class="content">
+                <div class="content-bg">
+                </div>
+                <h1 class="title">event 自定义事件 底层核心库</h1>
+                <div class="artic-wrap">
+                    <div class="time">2015-07-09</div>
+                    <div class="article">
+                        <p>经过接力赛式的产品快速开发迭代，这段时间终于闲了下来。总结一下前段时间写的一个底层事件驱动类库。 </p>
+                        <p>之前写过一些存储之类的，感觉在项目中运用很鸡肋。但这个却是让我有意外的收获，在项目中不仅有出色的表现，而且开辟了一个新的架构领域。 </p>
+                    </div>
+                    <h4>1：源代码</h4>
+                    <pre><code class="language">
+    &lt;script >
+               var Event = {
+                map: {},
+                listen: function (element, eventName, callback) {
+                    if (element.addEventListener) {
+                        element.addEventListener(eventName, calls, false);
+                        function calls(e) {
+                            return callback.apply(this, e.detail);
+                        }
+                    } else {
+                        var arry = element[eventName] || [];
+                        arry.push(callback);
+                        element[eventName] = arry;
+                    }
+                }, trigger: function (element, eventName) {
+                    if (element.createEvent) {
+                        var event = element.createEvent('CustomEvent');
+                        event.initCustomEvent(eventName, true, true, Array.prototype.slice.call(arguments, 2));
+                        element.dispatchEvent(event);
+                    } else {
+                        if (this.map[eventName] != true) {
+                            element.documentElement.attachEvent('onpropertychange', function (e) {
+                                var arry = element[eventName] || [];
+                                var parrm = element[eventName + "_param"] || [];
+                                if (e.propertyName == eventName) {
+                                    for (var i = 0; i < arry.length; i++) {
+                                        if (typeof arry[i] == "function") {
+                                            arry[i].apply(this, parrm[element[eventName + "_num"] - 1] || []);
+                                        }
+                                    }
+                                }
+                            });
+                            this.map[eventName] = true;
+                        }
+                        var parrm = element[eventName + "_param"] || [];
+                        var pry = Array.prototype.slice.call(arguments, 2) || [];
+                        parrm.push(pry);
+                        element[eventName + "_param"] = parrm;
+                        element[eventName + "_num"] = parrm.length;
+                        element.documentElement[eventName] = 0;
+                    }
+                }
+            }
+    &lt;/script>
+  </code></pre>
+                    <p>代码不多，但是却解决了非常多的兼容和适配问题。并不是浏览器提供一个addEventListener 方法供我们调用这么简单。</p>
+                    <p>1:addEventListener 在ie8以下 是不支持的，得换其他方式实现。参照jquery 事件处理 采用的 onpropertychange 这种办法来模拟解决事件监听。</p>
+                    <p>2：解决了一个问题，也就是大多数百度能百度到的东西。第二个问题是在采用第一个解决方案后，ie 下attachEvent 绑定多个事件的时候是先绑定，后执行。解决这种情况，采用的办法是在绑定事件的时候，并不是真的绑定，而是存在了一个临时数组中。事件只绑定一次，在触发事件的时候，去读取数组中的回调函数，依次执行。</p>
+                    <p>3：解决了第二个问题后，还有第三个参数传递的问题。ie 下参数也是通过数组存储，然后用函数名作为key 去一一对应最终传回给回调函数。</p>
+                    <p>addEventListener 这个是浏览器提供的方法，绑定事件传递参数后，在回调时，参数格式是他约定好传给你的（e.detail 这个对象是他约定的我们传的参数），并不是我们最初一个参数一个参数那样回调给我们。解决办法是，用闭包劫持参数然后处理后传给回调（偶然中想到的，非常经典）</p>
+                    <h4>2：以上的都不是重点</h4>
+                    <p>制造一个工具主要是解决一类问题。然而工具并不是不可替代的，成熟的类库有Event.js等，功能会比我写这个强大的多。</p>
+                    <p>本文的重点是，用这么一个类库能解决项目中开发的哪些问题。</p>
+                    <h4>3：说说两年前</h4>
+                    <p>经历爬坑阶段，注册登录是一个比较简单的模块，也是基本上所有网站都会有的一个模块。</p>
+                    <p>看看登录成功回调逻辑</p>
+                </div>
+                <pre><code class="language">
+    &lt;script >
+        //登录成功 全局回调函数
+        function loginsuccess(msg, data) {
+            WinCfg.isLogin = true;//登录成功标记
+            if(tmp.uid){
+                User.uid=tmp.uid;
+            }
+            if window.mynewbox){
+                mynewbox.slideHideFram();
+            }
+            if window.myheader){
+                window.myheader.startCheckLetter();
+                window.myheader.renderHeader(tmp, msg);
+                window.myheader.setLoginStatus(true, msg);
+            }
+            if(window.RoomList){
+                window.RoomList.refreshPannel();
+            }
+        }
+    &lt;/script>
+  </code></pre>
+                <p>网站所有页面通用一个 header 头部，所有页面都会引用这个头部，在异步登录成功后，会执行一些其他的事，到底是哪些事，我们要去一一判断类似这种</p>
+                <pre><code class="language">
+    &lt;script >
+            if(window.RoomList){//如果在播放页，那么就刷新一下某一个东西。
+                window.RoomList.refreshPannel();
+        }
+    &lt;/script>
+
+  </code></pre>
+                <p>假如有20个页面，那这种逻辑简直没法容忍，（第一：后续维护不敢乱动，因为不知道哪儿用了这段逻辑，第二：在一个非常简单的页面也需要执行这些判断，容易出错，而且浪费资源）,而且还有登录失败这种回调里面也要处理这些...</p>
+                <p>实际上大部分人都是这么处理的....</p>
+                <h4>1:过了一年</h4>
+                <p>一个新的项目让我有机会重新写这一块逻辑</p>
+                <p>新的注册登录回调采用注册函数的形式</p>
+                </code></pre>
+                <p>网站所有页面通用一个 header 头部，所有页面都会引用这个头部，在异步登录成功后，会执行一些其他的事，到底是哪些事，我们要去一一判断类似这种</p>
+                <pre><code class="language">
+    &lt;script >
+    var LSarry = [];//登录成功回调函数
+    var LFarry = [];//登录失败回调函数队列
+    var LOarry = [];//退出登录成功回调函数
+    var RSarry = [];//注册成功回调函数
+    var RFarry = [];//注册失败回调函数队列
+    Sign={
+          registCallback: function (type, fun) {
+            if (type === "login") {
+                if (typeof fun == "function") {
+                    LSarry.push(fun);
+                }
+            }
+            else if (type === "logfail") {
+                if (typeof fun == "function") {
+                    LFarry.push(fun);
+                }
+            }
+            else if (type === "logout") {
+                if (typeof fun == "function") {
+                    LOarry.push(fun);
+                }
+            }
+            else if (type === "regist") {
+                if (typeof fun == "function") {
+                    RSarry.push(fun);
+                }
+            }
+            else if (type === "registfail") {
+                if (typeof fun == "function") {
+                    RFarry.push(fun);
+                }
+            }
+        },loginsuccess: function (ret) {
+            log("login sucess uid:" + ret["uid"] + " uname:" + ret["name"])
+            for (var key in LSarry) {
+                if (typeof LSarry[key] == "function") {
+                    LSarry[key](ret);
+                }
+            }
+        }
+    ...
+    }
+    &lt;/script>
+
+  </code></pre>
+                <p>定义一个函数队列，哪儿需要回调，就在需要的地方调用这个注册函数，将回调函数放入队列中。待登录成功后一并回调</p>
+                <pre><code class="language">
+    &lt;script >
+  registEvent: function () {
+            Sign.registCallback("regist", _this._registsuccess);
+            Sign.registCallback("registfail", _this._registfail);
+            Sign.registCallback("logout", _this._logoutsuccess);
+            Sign.registCallback("login", _this._loginsuccess);
+            Sign.registCallback("logfail", _this._loginfail);
+        },
+    &lt;/script>
+
+  </code></pre>
+                <p>这样将登录成功后需要做的事，具体让各个页面去负责管理，只需要注册一个回调函数就行了</p>
+                <p>其实上面那种办法已经将核心模块与业务逻辑分开了，属于比较不错的方案了。就是使用上有点绕。</p>
+                <h4>观察者模式的 event.js </h4>
+                <p>也就是上述插件开发出来后用自定义事件来解决注册登录回调模型</p>
+                <p>类库代码如上。下面是使用代码</p>
+                <pre><code class="language">
+    &lt;script >
+//登录成功 触发登录事件
+                success: function (ret) {
+                    if (ret["ret"] == 0) {
+                        //触发登录成功事件
+                        EVT.trigger(document, "loginsuccess", ret);
+                    }
+                    else {
+                        //触发登录成功事件
+                        EVT.trigger(document, "loginfail", ret);
+                    }
+                }
+==================注册事件===============
+//登录成功后莫一个页面要做一些事。
+     EVT.listen(document, "loginsuccess", function (ret) {
+                log("loginsuccess header callback", ret);
+            })
+    &lt;/script>
+
+  </code></pre>
+                <p>车间主管每天巡视100多个车间，每当天下雨时有些员工就会回家收衣服之类的，员工都写一张条子给主管（12号车间，小张收衣服，14号车间：老王关窗户）所以每次下雨的时候（只有主管知道），主管都会做一件事。是12号车间吗？是！ 小张收衣服，是13号车间吗？不是！。。是14号车间吗？....</p>
+                <p>主管很烦，那些条子还不能随便扔，万一每桶知道哪个员工，发生跳楼之类的就不好了</p>
+                <p>后来：每个车间多了一个箱子，员工只要把自己的条子放里面就行了，不用给主管。所以每次下雨了主管只用把箱子里面的条子拿出来通知就行了。小张收衣服</p>
+                <p>再到了后来，工厂给每个人装了个 章鱼app (event.js) 下雨就更方便了，主管只要对着app 说：下雨了该干啥干啥去。。。。员工通过订阅就可以知道要干自己的事了。</p>
+                <p>ps:我得早点下班，待会儿没车了。。下次续上。</p>
+            </div>
+        </div>
+        <div id="footer" ></div>
+        <script type="text/javascript" src="../js/lib/jquery-1.8.3.min.js"></script>
+        <script type="text/javascript" src="../js/main.js"></script>
+    </body>
+</html>
