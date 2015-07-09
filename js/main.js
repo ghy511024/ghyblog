@@ -9,6 +9,8 @@ var Main = (function ($) {
         layout: function () {
             $("#header").load("../model/header.html");
             $("#footer").load("../model/footer.html");
+            hljs.configure({tabReplace: '    '});
+            hljs.initHighlightingOnLoad();
         },
         initEvent: function () {
 
