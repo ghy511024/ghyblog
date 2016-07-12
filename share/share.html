@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/reveal.css" /> 
+        <link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/theme/black.css" /> 
+        <link rel="stylesheet" href="http://lab.hakim.se/reveal-js/lib/css/zenburn.css" /> 
+        <title>聚餐前的前端分享</title>
+    </head>
+    <body>
+        <div class="reveal">
+            <!-- Any section element inside of this container is displayed as a slide -->
+            <div class="slides">
+                <section>
+                    <h1>章鱼前端框架分享</h1>
+                    <h3>作者：龚虹宇</h3>
+                    <p>
+                        2016-07-15
+                    </p>
+                </section>
+                <section>
+                    <h2>分享内容</h2>
+                    <p class="fragment">1：后端框架，以及使用</p>
+                    <p class="fragment">2：通用配置系统</p>
+                </section>
+                <section>
+                    <h2>1：后端进化史</h2>
+                    <p class="fragment">1：传统后端管理页面</p>
+                    <p class="fragment">2：传统后端所面临的问题</p>
+                    <p class="fragment">3：解决方案探索</p>
+                </section>
+                <section>
+                    <section>
+                        <h2>页面难看</h2>
+                        <img src="11.png" alt="" />
+                    </section>
+                    <section>
+                        <h2>难操作</h2>
+                        <img src="12.png" alt="" />
+                    </section>
+                    <section>
+                        <h2>入口混乱</h2>
+                        <img src="13.png" alt="" />
+                    </section>
+                    <section>
+                        <h2>项目分散，整理归类难</h2>
+                        <img src="14.png" alt="" />
+                    </section>
+                    <section>
+                        <h2>需要解决运营的问题</h2>
+                        <ol>
+                            <li class="fragment">界面美化，版面最大利用率</li>
+                            <li class="fragment">入口集中，不要分散到各个地方</li>
+                            <li class="fragment">操作方便，功能明确</li>
+                        </ol>
+                    </section>
+                    <section>
+                        <h2>需要解决码农的问题</h2>
+                        <ol>
+                            <li class="fragment">不入侵业务</li>
+                            <li class="fragment">可移植性强</li>
+                            <li class="fragment">学习成本低，傻瓜式引用</li>
+                            <li class="fragment">扩展丰富</li>
+                            <li class="fragment">解决业务之外重复工作</li>
+                        </ol>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>CoolAdmin 章鱼后端框架</h2>
+                        <ol>
+                            <li class="fragment"><a href="http://admin.nln.me" target="_blank">框架简介</a></li>
+                            <li class="fragment">表单美化</li>
+                            <li class="fragment">日期控件</li>
+                            <li class="fragment">工具函数封装</li>
+                            <li class="fragment">扩展插件</li>
+                            <li class="fragment">动态表单</li>
+                        </ol>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>zyadmin 通用配置系统</h2>
+                        <ol>
+                            <li class="fragment">项目背景</li>
+                            <li class="fragment">项目障碍</li>
+                            <li class="fragment">使用介绍</li>
+                            <li class="fragment">项目规划</li>
+                        </ol>
+                    </section>
+                    <section>
+                        <h2>背景</h2>
+                        <p>写一个后端接口在现在我们项目中后端需要写些什么</p>
+                        <ol>
+                            <li class="fragment">jsp × 1</li>
+                            <li class="fragment">(JAVA)controller × 3 </li>
+                            <li class="fragment">(JAVA)process × 2</li>
+                            <li class="fragment">(JAVA)datalayer × 2</li>
+                        </ol>
+                    </section>
+                    <section>
+                        <h2>障碍</h2>
+                        <ol>
+                            <li class="fragment">存储结构</li>
+                            <li class="fragment">交互形式</li>
+                            <li class="fragment">与 zform 整合</li>
+                        </ol>
+                    </section>
+                    <section>
+                        <h2>介绍</h2>
+                        <a href="http://www.stable.zhangyu.tv/zyadmin/base/conflist" target="_blank">项目地址</a>
+                    </section>
+                    <section>
+                        <h2>规划</h2>
+                        <ol>
+                            <li class="fragment">支持更复杂的结构</li>
+                            <li class="fragment">与现有后端整合</li>
+                        </ol>
+                    </section>
+                </section>
+                <section>
+                    <h2>结尾</h2>
+                </section>
+            </div>
+        </div>
+
+        <script src="http://lab.hakim.se/reveal-js/lib/js/head.min.js"></script>
+        <script src="http://lab.hakim.se/reveal-js/js/reveal.js"></script>
+        <script>
+
+            // Full list of configuration options available at:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
+                transition: 'slide', // none/fade/slide/convex/concave/zoom
+                dependencies: [
+                    {src: 'http://lab.hakim.se/reveal-js/lib/js/classList.js', condition: function () {
+                            return !document.body.classList;
+                        }},
+                    {src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function () {
+                            return !!document.querySelector('[data-markdown]');
+                        }},
+                    {src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function () {
+                            return !!document.querySelector('[data-markdown]');
+                        }},
+                    {src: 'http://lab.hakim.se/reveal-js/plugin/highlight/highlight.js', async: true, condition: function () {
+                            return !!document.querySelector('pre code');
+                        }, callback: function () {
+                            hljs.initHighlightingOnLoad();
+                        }},
+                    {src: 'http://lab.hakim.se/reveal-js/plugin/zoom-js/zoom.js', async: true},
+                    {src: 'http://lab.hakim.se/reveal-js/plugin/notes/notes.js', async: true}
+                ]
+            });
+        </script>
+    </body>
+</html>
